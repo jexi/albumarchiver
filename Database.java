@@ -248,18 +248,20 @@ public class Database {
      * @param Year
      * @return 
      */
-    public boolean UpdateAlbum(Integer Album_ID, String Title, String Format, String Year) {
+    public boolean UpdateAlbum(Integer Album_ID, String Title, String Format, String Year, String Label) {
         try {
             String query = "UPDATE " + get_table() + 
                                 " SET " + get_fld_title() + "=?, " 
-                                + get_fld_format() + "=?, " 
-                                + get_fld_year() + "=? "
+                                + get_fld_format() + "=?, "
+                                + get_fld_year() + "=?, "
+                                + get_fld_label() + "=? "
                             + " WHERE " + get_fld_id() + "=?";
             pstatement = connection.prepareStatement(query);
             pstatement.setString(1, Title);
             pstatement.setString(2, Format);
             pstatement.setString(3, Year);
-            pstatement.setInt(4, Album_ID);
+            pstatement.setString(4, Label);
+            pstatement.setInt(5, Album_ID);
                         
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot create query", e);
@@ -449,7 +451,7 @@ public class Database {
                                 get_fld_id() + " INT(11) UNSIGNED NOT NULL AUTO_INCREMENT," +
                                 get_fld_title() + " VARCHAR(255) DEFAULT ''," +
                                 get_fld_artist() + " VARCHAR(255) DEFAULT NULL," +
-                                get_fld_format() + " ENUM('CD','CDs','MC','LP','2LP','S','EP','2CD','2MC') DEFAULT NULL," +
+                                get_fld_format() + " ENUM('CD','CDs','CDR','MC','LP','2LP','S','EP','2CD','2MC') DEFAULT NULL," +
                                 get_fld_year() + " INT(11) DEFAULT NULL," +
                                 get_fld_label() + " VARCHAR(255) DEFAULT NULL," +
                                 get_fld_comment() + " TEXT," +

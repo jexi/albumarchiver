@@ -25,6 +25,9 @@ import java.io.IOException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -104,6 +107,10 @@ public class Report {
                 text += data.getString("cnt");                
                 document.add(new Paragraph(new Text(text)));
             }
+            // date stamp
+            String TimeStamp = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("d MMM uuuu"));
+            text = "(updated at: " + TimeStamp + ")";
+            document.add(new Paragraph(new Text(text)));
         }   catch (SQLException ex) {
             Logger.getLogger(DisplayArtistAlbumsForm.class.getName()).log(Level.SEVERE, null, ex);
         }

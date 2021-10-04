@@ -20,9 +20,9 @@ public class ArtistAlbumsModel extends AbstractTableModel {
         
         public ArtistAlbumsModel(Integer num) {
             super();            
-            TableHeader = new String[] {"Album", "Format", "Year"};           
-            data = new Object[num][3];
-            TableData = new Object[num][3];
+            TableHeader = new String[] {"Album", "Format", "Year", "Label"};
+            data = new Object[num][4];
+            TableData = new Object[num][4];
         }        
                                 
         @Override
@@ -63,11 +63,7 @@ public class ArtistAlbumsModel extends AbstractTableModel {
         public Integer getAlbumID(Integer row) {
             return album_id.get(row);
         }
-        /*
-        public void setTableDataAt(int row, int column, String value) {
-            TableData[row][column] = value;
-        }*/
-        
+
         public String getTableDataAt(int row, int column) {
             return (String) TableData[row][column];
         }

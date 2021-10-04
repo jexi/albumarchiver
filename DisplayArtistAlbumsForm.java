@@ -118,6 +118,7 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
                 TableModel.setValueAt(rs.getString(db.get_fld_title()), RowNumber, 0);                                
                 TableModel.setValueAt(rs.getString(db.get_fld_format()), RowNumber, 1);
                 TableModel.setValueAt(rs.getString(db.get_fld_year()), RowNumber, 2);
+                TableModel.setValueAt(rs.getString(db.get_fld_label()), RowNumber, 3);
             }            
             // table creation
             jTableData = new JTable(TableModel);
@@ -125,6 +126,7 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
             jTableData.getColumnModel().getColumn(0).setPreferredWidth(340);            
             jTableData.getColumnModel().getColumn(1).setPreferredWidth(60);
             jTableData.getColumnModel().getColumn(2).setPreferredWidth(100);
+            jTableData.getColumnModel().getColumn(3).setPreferredWidth(200);
             AlbumCoverArt.setIcon(new ImageIcon(getClass().getResource("imagemissing.png"))); // display it
             // table row selection            
             jTableData.setCellSelectionEnabled(true);
@@ -159,7 +161,7 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
                     }
                 }
             });            
-            jTableData.setPreferredScrollableViewportSize(new java.awt.Dimension(500, 200));
+            jTableData.setPreferredScrollableViewportSize(new java.awt.Dimension(700, 200));
             TableScrollPane = new JScrollPane(jTableData);            
             container = getContentPane();
             container.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -172,9 +174,8 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
             container.add(jButtonWikipedia);
             // draw form
             setTitle(FirstUpperCase(SearchName) + " - " + NumberOfAlbums.toString() + " albums");            
-            setLocation(new java.awt.Point(300, 200));
-            //setSize(new java.awt.Dimension(625, 300));            
-            setSize(new java.awt.Dimension(650, 300));            
+            setLocation(new java.awt.Point(200, 200));
+            setSize(new java.awt.Dimension(850, 300));
         } catch (SQLException ex) {
             Logger.getLogger(DisplayArtistAlbumsForm.class.getName()).log(Level.SEVERE, null, ex);
         }       
@@ -203,7 +204,11 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {
                         
         for (int i = 0; i < TableModel.getRowCount(); i++) {
-            db.UpdateAlbum(TableModel.getAlbumID(i), TableModel.getTableDataAt(i, 0), TableModel.getTableDataAt(i, 1), TableModel.getTableDataAt(i, 2));            
+            db.UpdateAlbum(TableModel.getAlbumID(i),
+                            TableModel.getTableDataAt(i, 0),
+                            TableModel.getTableDataAt(i, 1),
+                            TableModel.getTableDataAt(i, 2),
+                            TableModel.getTableDataAt(i, 3));
         }
         db.Close();
         JOptionPane.showMessageDialog(null, "Update was successful", "Info", JOptionPane.INFORMATION_MESSAGE);

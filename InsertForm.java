@@ -20,7 +20,7 @@ public class InsertForm extends javax.swing.JFrame {
      * Creates new form InsertForm
      */
     public InsertForm() {
-        initComponents();
+        initComponents();        
     }
 
     /**
@@ -95,7 +95,7 @@ public class InsertForm extends javax.swing.JFrame {
 
         jLabelFormat.setText("Format");
 
-        jComboBoxFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CD", "2CD", "CDs", "LP", "2LP", "EP", "S", "MC", "2MC" }));
+        jComboBoxFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CD", "2CD", "CDs", "CDR", "LP", "2LP", "EP", "S", "MC", "2MC" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,7 +181,7 @@ public class InsertForm extends javax.swing.JFrame {
         String Label = jTextFieldLabel.getText();
         String Comments = jTextAreaComments.getText();
         String SortName = Artist;        
-        // insert albumm in db
+        // insert album in db
         Database db = new Database();        
         try {
             NumberOfArtist = db.NumberOfArtists(Artist);

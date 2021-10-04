@@ -5,9 +5,14 @@
 
 package albums;
 
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,14 +85,19 @@ public class HtmlExport {
                 if (data.getString(db.get_fld_format()) != null) {
                     html_stat = data.getString(db.get_fld_format());
                 } else {
-                    html_stat = "Σύνολο";
+                    html_stat = "Total";
                 }
                 html_stat += ":  ";
                 html_stat += data.getString("cnt");
                 html_body += htmlTag("h6", html_stat);
             }
+            // date stamp
+            String TimeStamp = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("d MMM uuuu"));
+            String html_timestamp = "(updated at: " + TimeStamp + ")";
+            html_body += htmlTag("h6", html_timestamp);
+
             // glue all html pieces together
-            html += htmlTag("html", html_head + htmlTag("body", html_body));                        
+            html += htmlTag("html", html_head + htmlTag("body", html_body));
             
         }   catch (SQLException ex) {
                 Logger.getLogger(DisplayArtistAlbumsForm.class.getName()).log(Level.SEVERE, null, ex);
