@@ -74,6 +74,7 @@ public class AlbumArchiver extends javax.swing.JFrame {
 
         jMenuActions.setText("Actions");
 
+        jMenuItemNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemNew.setText("Insert");
         jMenuItemNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,6 +83,7 @@ public class AlbumArchiver extends javax.swing.JFrame {
         });
         jMenuActions.add(jMenuItemNew);
 
+        jMenuItemSearch.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemSearch.setText("Search");
         jMenuItemSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +92,7 @@ public class AlbumArchiver extends javax.swing.JFrame {
         });
         jMenuActions.add(jMenuItemSearch);
 
+        jMenuItemEditArtist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemEditArtist.setText("Artist Edit ");
         jMenuItemEditArtist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,6 +102,7 @@ public class AlbumArchiver extends javax.swing.JFrame {
         jMenuActions.add(jMenuItemEditArtist);
         jMenuActions.add(jSeparatorActions);
 
+        jMenuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemExit.setText("Exit");
         jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

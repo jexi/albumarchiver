@@ -50,9 +50,12 @@ public class Database {
                 database_password = db_config.get_database_password();
                 connection = DriverManager.getConnection(database_url, database_username, database_password);
             }
-             catch (SQLException ex) {             
-                 System.out.println("Database is not working or wrong username/password!");
-                 System.exit(0);
+             catch (SQLException ex) {    
+                 // handle any errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                System.exit(0);
             }
         } else {
             System.out.println("Database config file not found! "
@@ -70,7 +73,9 @@ public class Database {
             connection = DriverManager.getConnection(db_connection_url);
         }
         catch (SQLException ex) {
-            System.out.println("Database is not working or wrong username/password!!");
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
             System.exit(0);
        }
         
