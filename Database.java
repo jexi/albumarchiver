@@ -401,7 +401,8 @@ public class Database {
      * @return 
      */
     public ResultSet FetchArtist() {
-        String query = "SELECT DISTINCT " + get_fld_artist() +                                  
+        String query = "SELECT DISTINCT " + get_fld_artist() +
+                            ", " + get_fld_artist_sort_name() +
                             " FROM " + get_table() +
                             " ORDER BY " + get_fld_artist_sort_name();
         return DatabaseQuery(query);
