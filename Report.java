@@ -37,7 +37,9 @@ public class Report {
     // pdf filename
     private static final String FILENAME = "albums.pdf";
     // font path
+    // macOS
     //private static final String FONT = "/Library/Fonts/Microsoft/Palatino LinoType.ttf";
+    // Ubuntu
     private static final String FONT = "/usr/share/fonts/truetype/Palatino_Linotype/Palatino_Linotype_Regular.ttf";
     // font size
     private static final float ARTIST_FONTSIZE = 10f;

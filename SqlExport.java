@@ -15,7 +15,8 @@ import java.util.logging.Logger;
  */
 public class SqlExport {
         
-    public final String MYSQLDUMP = "/usr/local/mysql/bin/mysqldump";
+    //public final String MYSQLDUMP = "/usr/local/mysql/bin/mysqldump"; /* macOS */
+    public final String MYSQLDUMP = "/usr/bin/mysqldump"; // Ubuntu
     public final String EXPORT_FILENAME = "albums.sql";
     public final String command;
 
