@@ -35,12 +35,7 @@ public class Report {
     private final PdfDocument pdf;
    
     // pdf filename
-    private static final String FILENAME = "albums.pdf";
-    // font path
-    // macOS
-    //private static final String FONT = "/Library/Fonts/Microsoft/Palatino LinoType.ttf";
-    // Ubuntu
-    private static final String FONT = "/usr/share/fonts/truetype/Palatino_Linotype/Palatino_Linotype_Regular.ttf";
+    private static final String FILENAME = "albums.pdf";    
     // font size
     private static final float ARTIST_FONTSIZE = 10f;
     private static final float ALBUM_FONTSIZE = 9f;
@@ -52,7 +47,8 @@ public class Report {
         FileOutputStream fos = new FileOutputStream(file);
         PdfWriter writer = new PdfWriter(fos);
         pdf = new PdfDocument(writer);
-        document = new Document(pdf);                        
+        document = new Document(pdf);
+        
     }            
     
     /**
@@ -62,9 +58,14 @@ public class Report {
     public void CreateReport() throws IOException {
                 
         try (document) {
-            String ListEntry, text;
+            String ListEntry, text, pdf_font = null;
+            Config cfg = new Config();            
             
-            PdfFont font = PdfFontFactory.createFont(FONT, PdfEncodings.IDENTITY_H);            
+            if (cfg.ReadConfig()) { // read font file
+                pdf_font = cfg.get_pdf_font();
+            }
+            
+            PdfFont font = PdfFontFactory.createFont(pdf_font, PdfEncodings.IDENTITY_H);
             document.add(new Paragraph(TITLE).setFont(font).setFontSize(14f));
             try {
                 Database db = new Database();

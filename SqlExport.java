@@ -14,15 +14,16 @@ import java.util.logging.Logger;
  * @author yannis
  */
 public class SqlExport {
-        
-    //public final String MYSQLDUMP = "/usr/local/mysql/bin/mysqldump"; /* macOS */
-    public final String MYSQLDUMP = "/usr/bin/mysqldump"; // Ubuntu
+            
     public final String EXPORT_FILENAME = "albums.sql";
-    public final String command;
+    public String command = null;
 
     public SqlExport() {
         Database db = new Database();
-        command = MYSQLDUMP + " --user=" + db.get_database_username() + " --password=" + db.get_database_password() + " " + db.get_database_name() + " " + db.get_table() + " -r " + EXPORT_FILENAME;
+        Config cfg = new Config();
+        if (cfg.ReadConfig()) {
+            command = cfg.get_mysql_exec() + " --user=" + db.get_database_username() + " --password=" + db.get_database_password() + " " + db.get_database_name() + " " + db.get_table() + " -r " + EXPORT_FILENAME;
+        }
     }
     
     /**

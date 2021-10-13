@@ -64,7 +64,9 @@ public class Config {
             String line_2 = "database_name = " + db_name + "\r\n";
             String line_3 = "database_username = " + db_username + "\r\n";
             String line_4 = "database_password = "  + db_password;
-            String file_contents = line_1 + line_2 + line_3 + line_4;
+            String line_5 = "pdf_font = ";
+            String line_6 = "mysql_exec = /usr/bin/mysqldump";
+            String file_contents = line_1 + line_2 + line_3 + line_4 + line_5 + line_6;
             byte[] byte_content = file_contents.getBytes();
 
             NewConfigFile.write(byte_content);
@@ -89,6 +91,14 @@ public class Config {
     
     public String get_database_password() {
         return DBConfig.getProperty("database_password");
+    }
+    
+    public String get_pdf_font() {
+        return DBConfig.getProperty("pdf_font");
+    }
+    
+    public String get_mysql_exec() {
+        return DBConfig.getProperty("mysql_exec");
     }
         
 }
