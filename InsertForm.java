@@ -8,6 +8,7 @@ package albums;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.time.Year;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,7 +38,6 @@ public class InsertForm extends javax.swing.JFrame {
         jLabelArtist = new javax.swing.JLabel();
         jTextFieldArtist = new javax.swing.JTextField();
         jLabelYear = new javax.swing.JLabel();
-        jTextFieldYear = new javax.swing.JTextField();
         jLabelLabel = new javax.swing.JLabel();
         jTextFieldLabel = new javax.swing.JTextField();
         jLabelComments = new javax.swing.JLabel();
@@ -47,6 +47,7 @@ public class InsertForm extends javax.swing.JFrame {
         jButtonCancel = new javax.swing.JButton();
         jLabelFormat = new javax.swing.JLabel();
         jComboBoxFormat = new javax.swing.JComboBox();
+        jSpinnerYear = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("New Album");
@@ -63,13 +64,6 @@ public class InsertForm extends javax.swing.JFrame {
         });
 
         jLabelYear.setText("Year");
-
-        jTextFieldYear.setColumns(4);
-        jTextFieldYear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldYearActionPerformed(evt);
-            }
-        });
 
         jLabelLabel.setText("Label");
 
@@ -97,6 +91,12 @@ public class InsertForm extends javax.swing.JFrame {
 
         jComboBoxFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CD", "2CD", "CDs", "CDR", "LP", "2LP", "EP", "S", "MC", "2MC" }));
 
+        Year currentYear = Year.now();
+        jSpinnerYear.setModel(new javax.swing.SpinnerNumberModel(currentYear.getValue(), 1955, 2040, 1));
+        jSpinnerYear.setToolTipText("");
+        jSpinnerYear.setFocusCycleRoot(true);
+        jSpinnerYear.setValue(2022);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,18 +111,17 @@ public class InsertForm extends javax.swing.JFrame {
                     .addComponent(jLabelComments)
                     .addComponent(jLabelFormat))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonInsert)
                         .addGap(39, 39, 39)
                         .addComponent(jButtonCancel))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextFieldTitle)
-                        .addComponent(jTextFieldArtist, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
-                    .addComponent(jTextFieldYear, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldTitle)
+                    .addComponent(jTextFieldArtist, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                     .addComponent(jTextFieldLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
@@ -143,7 +142,7 @@ public class InsertForm extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelYear)
-                    .addComponent(jTextFieldYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelLabel)
@@ -166,10 +165,6 @@ public class InsertForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTextFieldArtistActionPerformed
 
-    private void jTextFieldYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldYearActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldYearActionPerformed
-
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
         
         Integer NumberOfArtist = 0;
@@ -177,12 +172,12 @@ public class InsertForm extends javax.swing.JFrame {
         String Title = jTextFieldTitle.getText();
         String Artist = jTextFieldArtist.getText();
         String Format = (String) jComboBoxFormat.getSelectedItem();
-        Integer Year = Integer.parseInt(jTextFieldYear.getText());        
+        Integer Year = Integer.parseInt(jSpinnerYear.getValue().toString());
         String Label = jTextFieldLabel.getText();
         String Comments = jTextAreaComments.getText();
-        String SortName = Artist;        
+        String SortName = Artist;
         // insert album in db
-        Database db = new Database();        
+        Database db = new Database();
         try {
             NumberOfArtist = db.NumberOfArtists(Artist);
         } catch (SQLException ex) {
@@ -215,10 +210,10 @@ public class InsertForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelTitle;
     private javax.swing.JLabel jLabelYear;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSpinner jSpinnerYear;
     private javax.swing.JTextArea jTextAreaComments;
     private javax.swing.JTextField jTextFieldArtist;
     private javax.swing.JTextField jTextFieldLabel;
     private javax.swing.JTextField jTextFieldTitle;
-    private javax.swing.JTextField jTextFieldYear;
     // End of variables declaration//GEN-END:variables
 }
