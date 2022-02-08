@@ -6,6 +6,7 @@
 package albums;
 
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.time.Year;
@@ -175,7 +176,7 @@ public class InsertForm extends javax.swing.JFrame {
         Integer Year = Integer.parseInt(jSpinnerYear.getValue().toString());
         String Label = jTextFieldLabel.getText();
         String Comments = jTextAreaComments.getText();
-        String SortName = Artist;
+        String SortArtistName = Artist;
         // insert album in db
         Database db = new Database();
         try {
@@ -183,13 +184,22 @@ public class InsertForm extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InsertForm.class.getName()).log(Level.SEVERE, null, ex);
         }        
-        if (db.InsertAlbum(Title, Artist, Format, Year, Label, Comments, SortName)) {
+        if (db.InsertAlbum(Title, Artist, Format, Year, Label, Comments, SortArtistName)) {
             JOptionPane.showMessageDialog(null, "Album inserted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             if (NumberOfArtist == 0) { // new artist ? 
-                String SortArtistName = (String) JOptionPane.showInputDialog(null, "Enter (sortable) artist name", "Search", JOptionPane.INFORMATION_MESSAGE, null, null, Artist);
+                SortArtistName = (String) JOptionPane.showInputDialog(null, "Enter (sortable) artist name", "Search", JOptionPane.INFORMATION_MESSAGE, null, null, Artist);
                 if (db.UpdateArtistSortName(Artist, SortArtistName)) { // if yes then update it with `sort` name
                     JOptionPane.showMessageDialog(null, "Album updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
+            } else {                
+                ResultSet rs = db.GetArtistSortName(Artist);                
+                try {
+                    rs.next();
+                    SortArtistName = rs.getString(1);                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(InsertForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                db.UpdateArtistSortName(Artist, SortArtistName);
             }
         }
         dispose();        

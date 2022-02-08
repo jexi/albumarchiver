@@ -179,7 +179,7 @@ public class Database {
      * @param Artist
      * @return 
      */
-    public ResultSet SearchArtist(String Artist) {        
+    public ResultSet SearchArtist(String Artist) {
         try {
             String query = "SELECT artist_name FROM " + get_table() + " "
                              + "WHERE " + get_fld_artist() + 
@@ -198,6 +198,31 @@ public class Database {
         return result;
     }
     
+    
+    /**
+     * @brief get artist sort name
+     * @param Artist
+     * @return 
+     */
+    public ResultSet GetArtistSortName(String Artist) {
+        try {
+            String query = "SELECT sort_name FROM " + get_table() + " WHERE " + get_fld_artist() + "=?";            
+            pstatement = connection.prepareStatement(query);
+            pstatement.setString(1, Artist);
+            
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot create query", e);
+        }
+        try {
+            result = pstatement.executeQuery();
+        } catch (SQLException e) {
+            throw new IllegalStateException("Query Error! ", e);
+        }
+        return result;
+    }
+    
+    
+    
     /**
      * @brief delete album
      * @param Album_ID
@@ -205,7 +230,7 @@ public class Database {
      */
     public boolean DeleteAlbum(Integer Album_ID) {        
         try {
-            String query = "DELETE FROM " + get_table() + " WHERE " + get_fld_id() + "=?";                                                 
+            String query = "DELETE FROM " + get_table() + " WHERE " + get_fld_id() + "=?";
             pstatement = connection.prepareStatement(query);
             pstatement.setInt(1, Album_ID);
                         
@@ -251,6 +276,7 @@ public class Database {
      * @param Title
      * @param Format
      * @param Year
+     * @param Label
      * @return 
      */
     public boolean UpdateAlbum(Integer Album_ID, String Title, String Format, String Year, String Label) {
@@ -306,9 +332,12 @@ public class Database {
         return true;
     }
     
-    /**
-     * @brief update artist sort name
-     */     
+    /**     
+     * @brief update artist sort name          
+     * @param Artist
+     * @param ArtistSortName
+     * @return 
+     */
     public boolean UpdateArtistSortName(String Artist, String ArtistSortName) {
         try {
             String query = "UPDATE " + get_table() + 
