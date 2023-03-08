@@ -183,7 +183,8 @@ public class Database {
         try {
             String query = "SELECT artist_name FROM " + get_table() + " "
                              + "WHERE " + get_fld_artist() + 
-                            " LIKE ? GROUP BY " + get_fld_artist();                             
+                            " LIKE ? GROUP BY " + get_fld_artist() + "," + get_fld_artist_sort_name() +
+                            " ORDER BY " + get_fld_artist_sort_name();
             pstatement = connection.prepareStatement(query);
             pstatement.setString(1, "%" + Artist + "%");
             

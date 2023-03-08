@@ -52,6 +52,8 @@ public class AlbumArchiver extends javax.swing.JFrame {
         jMenuActions = new javax.swing.JMenu();
         jMenuItemNew = new javax.swing.JMenuItem();
         jMenuItemSearch = new javax.swing.JMenuItem();
+        jMenuItemDisplayCompilations = new javax.swing.JMenuItem();
+        jMenuItemDisplaySoundtrack = new javax.swing.JMenuItem();
         jMenuItemEditArtist = new javax.swing.JMenuItem();
         jSeparatorActions = new javax.swing.JPopupMenu.Separator();
         jMenuItemExit = new javax.swing.JMenuItem();
@@ -74,7 +76,7 @@ public class AlbumArchiver extends javax.swing.JFrame {
 
         jMenuActions.setText("Actions");
 
-        jMenuItemNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItemNew.setText("Insert");
         jMenuItemNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,8 +85,8 @@ public class AlbumArchiver extends javax.swing.JFrame {
         });
         jMenuActions.add(jMenuItemNew);
 
-        jMenuItemSearch.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemSearch.setText("Search");
+        jMenuItemSearch.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMenuItemSearch.setText("Search Artist");
         jMenuItemSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemSearchActionPerformed(evt);
@@ -92,7 +94,23 @@ public class AlbumArchiver extends javax.swing.JFrame {
         });
         jMenuActions.add(jMenuItemSearch);
 
-        jMenuItemEditArtist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemDisplayCompilations.setText("Display Compilations");
+        jMenuItemDisplayCompilations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCompilationsActionPerformed(evt);
+            }
+        });
+        jMenuActions.add(jMenuItemDisplayCompilations);
+
+        jMenuItemDisplaySoundtrack.setText("Display Soundtracks");
+        jMenuItemDisplaySoundtrack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemDisplaySoundtrackActionPerformed(evt);
+            }
+        });
+        jMenuActions.add(jMenuItemDisplaySoundtrack);
+
+        jMenuItemEditArtist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItemEditArtist.setText("Artist Edit ");
         jMenuItemEditArtist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,7 +120,7 @@ public class AlbumArchiver extends javax.swing.JFrame {
         jMenuActions.add(jMenuItemEditArtist);
         jMenuActions.add(jSeparatorActions);
 
-        jMenuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItemExit.setText("Exit");
         jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -246,7 +264,7 @@ public class AlbumArchiver extends javax.swing.JFrame {
         
         Database db = new Database();
         Integer numOfArtists = 0;
-        String SearchArtistName = JOptionPane.showInputDialog(null, "Enter Artist name", "Search", JOptionPane.INFORMATION_MESSAGE);
+        String SearchArtistName = JOptionPane.showInputDialog(null, "Enter Artist Name", "Search", JOptionPane.INFORMATION_MESSAGE);
         if (SearchArtistName != null) {
             try {
                 numOfArtists = db.NumberOfArtists(SearchArtistName);
@@ -334,6 +352,47 @@ public class AlbumArchiver extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItemStatActionPerformed
 
+    private void jMenuItemCompilationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCompilationsActionPerformed
+        Database db = new Database();
+        Integer numOfAlbums = 0;
+        String SearchName = "Various"; // display only `various` albums
+        try {
+            numOfAlbums = db.NumberOfAlbums(SearchName);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlbumArchiver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (numOfAlbums == 0) { // no results
+            JOptionPane.showMessageDialog(null, "There are no albums", "Search", JOptionPane.WARNING_MESSAGE);
+        } else { try {
+            // display search results
+            new DisplayArtistAlbumsForm(SearchName.trim(), numOfAlbums).setVisible(true);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(AlbumArchiver.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }//GEN-LAST:event_jMenuItemCompilationsActionPerformed
+
+    private void jMenuItemDisplaySoundtrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDisplaySoundtrackActionPerformed
+        Database db = new Database();
+        Integer numOfAlbums = 0;
+        String SearchName = "O.S.T."; // display only soundtracks
+        try {
+            numOfAlbums = db.NumberOfAlbums(SearchName);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlbumArchiver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (numOfAlbums == 0) { // no results
+            JOptionPane.showMessageDialog(null, "There are no albums", "Search", JOptionPane.WARNING_MESSAGE);
+        } else { try {
+            // display search results
+            new DisplayArtistAlbumsForm(SearchName.trim(), numOfAlbums).setVisible(true);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(AlbumArchiver.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jMenuItemDisplaySoundtrackActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -379,6 +438,8 @@ public class AlbumArchiver extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBarMain;
     private javax.swing.JMenu jMenuInfo;
     private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemDisplayCompilations;
+    private javax.swing.JMenuItem jMenuItemDisplaySoundtrack;
     private javax.swing.JMenuItem jMenuItemEditArtist;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemExportEpub;
