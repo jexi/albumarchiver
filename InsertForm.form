@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupVariousOST">
+    </Component>    
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="New Album"/>
@@ -27,7 +31,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabelTitle" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -37,19 +41,26 @@
                   <Component id="jLabelComments" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelFormat" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="75" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <EmptySpace pref="91" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="jButtonInsert" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                      <Component id="jButtonCancel" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonVarious" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonOST" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jTextFieldTitle" max="32767" attributes="0"/>
-                  <Component id="jTextFieldArtist" pref="300" max="32767" attributes="0"/>
-                  <Component id="jTextFieldLabel" alignment="0" min="-2" pref="244" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" min="-2" pref="259" max="-2" attributes="0"/>
-                  <Component id="jComboBoxFormat" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jSpinnerYear" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="jButtonInsert" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                          <Component id="jButtonCancel" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jTextFieldTitle" max="32767" attributes="0"/>
+                      <Component id="jTextFieldArtist" pref="300" max="32767" attributes="0"/>
+                      <Component id="jTextFieldLabel" alignment="0" min="-2" pref="244" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" pref="259" max="-2" attributes="0"/>
+                      <Component id="jComboBoxFormat" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jSpinnerYear" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
           </Group>
@@ -68,32 +79,37 @@
                   <Component id="jLabelArtist" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jTextFieldArtist" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jRadioButtonVarious" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonOST" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="24" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelFormat" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jComboBoxFormat" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelYear" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jSpinnerYear" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jTextFieldLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabelComments" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonInsert" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="32" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -201,6 +217,22 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Year currentYear = Year.now();"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRadioButtonVarious">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Various"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButtonVariousActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRadioButtonOST">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="O.S.T."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButtonOSTActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
