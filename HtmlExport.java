@@ -5,9 +5,6 @@
 
 package albums;
 
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Text;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -74,7 +71,12 @@ public class HtmlExport {
                         }
                     }
                     ArtistAlbum += ")";
-                    htmlArtistAlbum += htmlTag("li", ArtistAlbum);
+                    String AlbumComment = res.getString(db.get_fld_comment()); // album comment
+                    if (AlbumComment != null && !AlbumComment.isEmpty()) {
+                        htmlArtistAlbum += htmlTag("li", ArtistAlbum + "  " + htmlTag("small", AlbumComment));                        
+                    } else {
+                        htmlArtistAlbum += htmlTag("li", ArtistAlbum);                        
+                    }                    
                 }
                 html_body += htmlTag("ul", htmlArtistAlbum);
             }

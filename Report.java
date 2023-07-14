@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,6 +83,7 @@ public class Report {
                         list.setSymbolIndent(8f);
                         ListEntry = res.getString(db.get_fld_title()); // artist album
                         ListEntry += " (" + res.getString(db.get_fld_format()); // album format
+                        
                         if (res.getString(db.get_fld_year()) != null && !res.getString(db.get_fld_year()).isEmpty()) {
                             ListEntry += " - " + res.getString(db.get_fld_year());      // year
                             if (res.getString(db.get_fld_label()) != null && !res.getString(db.get_fld_label()).isEmpty()) {
@@ -89,8 +91,13 @@ public class Report {
                             }
                         }
                         ListEntry += ")";
+                        String AlbumComment = res.getString(db.get_fld_comment());  // album comment
+                        if (AlbumComment != null && !AlbumComment.isEmpty()) {
+                            // TO DO: display compatible unicode character !!
+                            ListEntry += "  " + Character.toString((char)0x1F449) + AlbumComment;
+                        }
                         list.setSymbolIndent(20f);
-                        list.add(new ListItem(ListEntry));
+                        list.add(new ListItem(ListEntry));                        
                         document.add(list);
                     }
                 }

@@ -155,7 +155,8 @@ public class Database {
                                      + get_fld_title() + "," 
                                      + get_fld_format() + "," 
                                      + get_fld_year() + "," 
-                                     + get_fld_label() +
+                                     + get_fld_label() + ","
+                                     + get_fld_comment() +
                                 " FROM " + get_table() +
                               " WHERE " + get_fld_artist() + "=?"
                             + " ORDER BY " + get_fld_year() + " DESC";            
