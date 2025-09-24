@@ -39,7 +39,7 @@ public class Report {
     // font size
     private static final float ARTIST_FONTSIZE = 10f;
     private static final float ALBUM_FONTSIZE = 9f;
-    private static final String TITLE = "Albums List";
+    private static final String TITLE = "Κατάλογος";
     
     public Report() throws FileNotFoundException {
         
@@ -56,6 +56,9 @@ public class Report {
      * @throws IOException 
      */
     public void CreateReport() throws IOException {
+                
+        Integer[] report_data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        Integer report_data_cnt = 0;
                 
         try (document) {
             String ListEntry, text, pdf_font = null;
@@ -100,26 +103,88 @@ public class Report {
                         document.add(list);
                     }
                 }
+                                                                
                 
-                // statistics
-                ResultSet data = db.CountAlbum();
-                while (data.next()) {
-                    if (data.getString(db.get_fld_format()) != null) {
-                        text = data.getString(db.get_fld_format());
-                    } else {
-                        text = "Total";
-                    }
-                    text += ":  ";
-                    text += data.getString("cnt");
-                    document.add(new Paragraph(new Text(text)));
+                // statistics                                
+                                
+                // count total
+                ResultSet data_all = db.CountTotalAlbum();                
+                while (data_all.next()) {                    
+                    report_data[report_data_cnt] = data_all.getInt("cnt");
+                    report_data_cnt++;
                 }
+                // count cds
+                ResultSet data_cd = db.CountCD();                
+                while (data_cd.next()) {                    
+                    report_data[report_data_cnt] = data_cd.getInt("cnt");
+                    report_data_cnt++;
+                }
+                
+                // count lps
+                ResultSet data_lp = db.CountLP();                
+                while (data_lp.next()) {                                        
+                    report_data[report_data_cnt] = data_lp.getInt("cnt");
+                    report_data_cnt++;
+                }
+                // count mc
+                ResultSet data_mc = db.CountMC();
+                while (data_mc.next()) {                                        
+                    report_data[report_data_cnt] = data_mc.getInt("cnt");
+                    report_data_cnt++;
+                }
+                                    
+                text = FormatReportToText(
+                                           report_data[0], 
+                                           report_data[5], 
+                                           report_data[2], 
+                                           report_data[3], 
+                                           report_data[4],
+                                           report_data[9],
+                                           report_data[7],
+                                           report_data[8],
+                                           report_data[12],
+                                           report_data[11]
+                                        );
+                                                
                 // date stamp
-                String TimeStamp = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("d MMM uuuu"));                
-                text = "(updated at: " + TimeStamp + ")";
+                String TimeStamp = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("d / M / uuuu"));
+                text += "(τελευταία ενημέρωση στις: " + TimeStamp + ")";
                 document.add(new Paragraph(new Text(text)));
+                
             }   catch (SQLException ex) {
                 Logger.getLogger(DisplayArtistAlbumsForm.class.getName()).log(Level.SEVERE, null, ex);
             }
+                        
         }
-    }            
+    }
+    
+    
+    /**
+     * @brief format report     
+     * @param total
+     * @param cd
+     * @param cd_2
+     * @param cds
+     * @param cdr
+     * @param lp
+     * @param lp_2
+     * @param lps     
+     * @param mc
+     * @param mc_2
+     * @return 
+     */
+    private String FormatReportToText(Integer total, 
+                                    Integer cd, Integer cd_2, Integer cds, Integer cdr, 
+                                     Integer lp, Integer lp_2, Integer lps, 
+                                     Integer mc, Integer mc_2) {
+            
+        String out = "";
+        out += "\n\nΥπάρχουν συνολικά " + total +" άλμπουμς. Αναλυτικά:\n\n";        
+        out += cd + " CD (" + cd_2 + " διπλά, " + cds  + " CD singles, " + cdr + " CDR)\n";
+        out += lp + " δίσκοι (" + lp_2 + " διπλοί, " + lps + " singles)\n";
+        out += mc + " κασσέτες (" + mc_2 + " διπλές)\n\n";
+        
+        return out;
+    }
+    
 }

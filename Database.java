@@ -244,7 +244,7 @@ public class Database {
         } catch (SQLException e) {
             throw new IllegalStateException("Query Error! ", e);
         }
-        Close();        
+        Close();
         return true;
     }
     
@@ -368,7 +368,54 @@ public class Database {
     public ResultSet CountAlbum() {
     
         String query = "SELECT " + get_fld_format() + ", COUNT(" + get_fld_format() + ") AS cnt "
-                        + "FROM " + get_table() + " GROUP BY " + get_fld_format()  + " WITH ROLLUP";
+                        + "FROM " + get_table() + " GROUP BY " + get_fld_format()  + " WITH ROLLUP";        
+        return DatabaseQuery(query);
+    }
+    
+    
+    public ResultSet CountTotalAlbum() {
+    
+        String query = "SELECT COUNT(*) AS cnt FROM " + get_table();
+        return DatabaseQuery(query);
+    }
+    
+    /**
+     * @brief count CD's
+     * @return 
+     */
+    public ResultSet CountCD() {
+    
+        String query = "SELECT " + get_fld_format() + ", COUNT(" + get_fld_format() + ") AS cnt "
+                        + "FROM " + get_table() + " "
+                        + "WHERE " + get_fld_format() + " IN ('CD', '2CD', 'CDs', 'CDR') "
+                        + "GROUP BY " + get_fld_format()  + " WITH ROLLUP";        
+        return DatabaseQuery(query);
+    }
+    
+    
+    /**
+     * @brief count LP's
+     * @return 
+     */
+    public ResultSet CountLP() {
+    
+        String query = "SELECT " + get_fld_format() + ", COUNT(" + get_fld_format() + ") AS cnt "
+                        + "FROM " + get_table() + " "
+                        + "WHERE " + get_fld_format() + " IN ('LP', '2LP', 'S') "
+                        + "GROUP BY " + get_fld_format()  + " WITH ROLLUP";        
+        return DatabaseQuery(query);
+    }
+    
+    /**
+     * @brief count MC's
+     * @return 
+     */
+    public ResultSet CountMC() {
+    
+        String query = "SELECT " + get_fld_format() + ", COUNT(" + get_fld_format() + ") AS cnt "
+                        + "FROM " + get_table() + " "
+                        + "WHERE " + get_fld_format() + " IN ('MC', '2MC') "
+                        + "GROUP BY " + get_fld_format()  + " WITH ROLLUP";        
         return DatabaseQuery(query);
     }
     

@@ -24,13 +24,13 @@ import java.io.InputStreamReader;
 public class HtmlExport {
     
     private final String HTML_FILENAME = "albums.html";
-    private final String CSS_FILENAME = "albums.css";
+    private final String CSS_FILENAME = "albums.css";    
     private String htmlArtistAlbum;    
     private String html, css;
-    private String html_stat, html_body, html_head;
+    private String html_body, html_head;
     
     public HtmlExport() {
-        html = html_body = html_head = html_stat = htmlArtistAlbum = css = "";
+        html = html_body = html_head = htmlArtistAlbum = css = "";
     }
            
     /**
@@ -47,6 +47,8 @@ public class HtmlExport {
      * @return html formatted string
      */
     public String CreateHtml() {
+        Integer[] report_data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        Integer report_data_cnt = 0;
         
         // <head> ..html_code </head>
         html_head = htmlHead(); 
@@ -80,22 +82,55 @@ public class HtmlExport {
                 }
                 html_body += htmlTag("ul", htmlArtistAlbum);
             }
+            html_body += "<hr>";
             
-            // html_statistics
-            ResultSet data = db.CountAlbum();
-            while (data.next()) {
-                if (data.getString(db.get_fld_format()) != null) {
-                    html_stat = data.getString(db.get_fld_format());
-                } else {
-                    html_stat = "Total";
-                }
-                html_stat += ":  ";
-                html_stat += data.getString("cnt");
-                html_body += htmlTag("h6", html_stat);
+            // Statistics                                
+            // count total
+            ResultSet data_all = db.CountTotalAlbum();                
+            while (data_all.next()) {                    
+                report_data[report_data_cnt] = data_all.getInt("cnt");
+                report_data_cnt++;
             }
-            // date stamp
-            String TimeStamp = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("d MMM uuuu"));
-            String html_timestamp = "(updated at: " + TimeStamp + ")";
+            // count cds
+            ResultSet data_cd = db.CountCD();                
+            while (data_cd.next()) {                    
+                report_data[report_data_cnt] = data_cd.getInt("cnt");
+                report_data_cnt++;
+            }
+
+            // count lps
+            ResultSet data_lp = db.CountLP();                
+            while (data_lp.next()) {                                        
+                report_data[report_data_cnt] = data_lp.getInt("cnt");
+                report_data_cnt++;
+            }
+            // count mc
+            ResultSet data_mc = db.CountMC();
+            while (data_mc.next()) {                                        
+                report_data[report_data_cnt] = data_mc.getInt("cnt");
+                report_data_cnt++;
+            }
+
+
+            html_body += FormatReportToHtml(
+                                       report_data[0], 
+                                       report_data[5], 
+                                       report_data[2], 
+                                       report_data[3], 
+                                       report_data[4],
+                                       report_data[9],
+                                       report_data[7],
+                                       report_data[8],
+                                       report_data[12],
+                                       report_data[11]
+                                    );
+            
+            
+            // date stamp            
+            String TimeStamp = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("d / M / uuuu"));
+            String html_timestamp = "(τελευταία ενημέρωση στις: " + TimeStamp + ")";
+            
+            
             html_body += htmlTag("h6", html_timestamp);
 
             // glue all html pieces together
@@ -106,6 +141,36 @@ public class HtmlExport {
         }                
         return html;
     }
+    
+    
+    /**
+     * @brief format report     
+     * @param total
+     * @param cd
+     * @param cd_2
+     * @param cds
+     * @param cdr
+     * @param lp
+     * @param lp_2
+     * @param lps     
+     * @param mc
+     * @param mc_2
+     * @return 
+     */
+    private String FormatReportToHtml(Integer total, 
+                                     Integer cd, Integer cd_2, Integer cds, Integer cdr, 
+                                     Integer lp, Integer lp_2, Integer lps, 
+                                     Integer mc, Integer mc_2) {
+            
+        String out = "";
+        out += "<br><p>Υπάρχουν συνολικά <strong>" + total +"</strong> άλμπουμς. Αναλυτικά:</p><br><br>";        
+        out += "<p><strong>" + cd + "</strong> CD (" + cd_2 + " διπλά, " + cds + " CD singles, " + cdr + " CDR)</p><br>";
+        out += "<p><strong>" + lp + "</strong> δίσκοι (" + lp_2 + " διπλοί, " + lps + " singles)</p><br>";
+        out += "<p><strong>" + mc + "</strong> κασσέτες (" + mc_2 + " διπλές)</p><br><br>";
+        
+        return out;
+    }
+    
     
     /**
      * @brief create css file for using it in html and epub files
