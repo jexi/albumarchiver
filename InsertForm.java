@@ -88,13 +88,13 @@ public class InsertForm extends javax.swing.JFrame {
                 
         jLabelFormat.setText("Format");
 
-        jComboBoxFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CD", "2CD", "CDs", "CDR", "LP", "2LP", "EP", "S", "MC", "2MC" }));
+        jComboBoxFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { 
+            "CD", "2CD", "CDs", "CDR", "LP", "2LP", "EP", "S", "MC", "2MC" 
+        }));
 
         Year currentYear = Year.now();
-        jSpinnerYear.setModel(new javax.swing.SpinnerNumberModel(currentYear.getValue(), 1955, 2040, 1));
-        jSpinnerYear.setToolTipText("");
-        jSpinnerYear.setFocusCycleRoot(true);
-        jSpinnerYear.setValue(2022);
+        jSpinnerYear.setModel(new javax.swing.SpinnerNumberModel(currentYear.getValue(), 1955, 2040, 1));        
+        jSpinnerYear.setFocusCycleRoot(true);        
 
         jRadioButtonVarious.setText("Various");
         jRadioButtonVarious.addActionListener(new java.awt.event.ActionListener() {
