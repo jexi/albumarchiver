@@ -35,6 +35,7 @@ Project users the following libraries
 * [Epublib](http://www.siegmann.nl/epublib) for creating epub book.
 * [itext 7](https://itextpdf.com/) for creating pdf
 * iTunes API [https://github.com/mdewilde/itunes-api] for displaying iTunes artwork covers
+* jFreeChart [https://www.jfree.org/jfreechart/] for displaying charts
 * Keep in mind that in order to export mysql data you must have mysqldump in path `/usr/local/mysql/bin/mysqldump`
 
 ### Contribution guidelines ###
