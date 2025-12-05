@@ -342,9 +342,9 @@ public class AlbumArchiver extends javax.swing.JFrame {
     private void jMenuItemStatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemStatActionPerformed
         
         Database db = new Database();
-        String AlbumSum = "You have";
+        String AlbumSum = "";
         try {
-            AlbumSum += System.lineSeparator()+db.getFormattedCountAlbum();
+            AlbumSum += db.getFormattedCountAlbum();
         } catch (SQLException ex) {
             Logger.getLogger(AlbumArchiver.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -426,21 +426,14 @@ public class Database {
      */
     public String getFormattedCountAlbum() throws SQLException {
         
-        String album_text = System.lineSeparator();
-        String temp_text;
-        
-        ResultSet data = CountAlbum();
+                        
+        String album_text = "";        
+        ResultSet data = CountTotalAlbum();
+                           
         while (data.next()) {
-            if (data.getString(get_fld_format()) != null) {
-                temp_text = data.getString(get_fld_format());
-            } else {
-                temp_text = System.lineSeparator() + "Total";
-            }
-            temp_text += ": ";
-            temp_text += data.getString("cnt") + System.lineSeparator();            
-            album_text += temp_text;
+            album_text += data.getInt("cnt");            
         }
-        return album_text;
+        return " You have " + album_text + " albums !";
     }
     
     
