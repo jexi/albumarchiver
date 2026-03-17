@@ -14,10 +14,17 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Desktop;
+import java.awt.Dimension;
 
 import java.io.IOException;
 
@@ -29,13 +36,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import be.ceau.itunesapi.response.Response;
+import be.ceau.itunesapi.response.Result;
 import be.ceau.itunesapi.Search;
 import be.ceau.itunesapi.request.search.Media;
-import be.ceau.itunesapi.response.Result;
+import be.ceau.itunesapi.request.Entity;
+import be.ceau.itunesapi.Lookup;
 
 /**
  *
@@ -45,15 +55,18 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
             
     private static final String WIKIPEDIA_LINK = "http://en.wikipedia.org/wiki/";
     private static final String SUFFIX_LINK = "_discography";
-    
+            
     private JButton jButtonBack;
     private JButton jButtonDelete;
     private JButton jButtonUpdate;
     private JButton jButtonWikipedia;
     private JTable jTableData;
     private JScrollPane TableScrollPane;
-    private Container container;
+    private JScrollPane SongsScrollPane;
+    private Container containerData;    
     private JLabel AlbumCoverArt;
+    private JTextArea SongsTextArea;    
+    private JPanel buttonPanel;
        
     private Integer AlbumID;             
     private ArtistAlbumsModel TableModel;
@@ -79,8 +92,17 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
         Link = WIKIPEDIA_LINK + SearchName.replace(' ', '_') + SUFFIX_LINK;        
         
         setResizable(false);                
-        // add events
+        
         AlbumCoverArt = new JLabel();
+        
+        SongsTextArea = new JTextArea(15, 30);
+        SongsTextArea.setEditable(false);        
+        SongsTextArea.setCursor(null);
+        SongsTextArea.setFocusable(false);
+        SongsTextArea.setLineWrap(true);
+        SongsTextArea.setBackground(Color.LIGHT_GRAY);
+        
+        // add button events
         jButtonBack = new JButton("Back");        
         jButtonBack.addActionListener((java.awt.event.ActionEvent evt) -> {
             jButtonBackActionPerformed(evt);
@@ -108,12 +130,12 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
             ResultSet rs = db.SearchAlbum(SearchName);
             // search for artists albums in iTunes
             Response response = new Search(SearchName).setMedia(Media.MUSIC).execute();                        
-            List<Result> iTunesResults = response.getResults();                                                            
+            List<Result> iTunesResults = response.getResults();
             
             TableModel = new ArtistAlbumsModel(NumberOfAlbums);            
             while (rs.next()) {
                 Integer RowNumber = rs.getRow()-1;
-                Integer RowID = Integer.parseInt(rs.getString(db.get_fld_id()));                    
+                Integer RowID = Integer.valueOf(rs.getString(db.get_fld_id()));
                 TableModel.setAlbumID(RowNumber, RowID);
                 TableModel.setValueAt(rs.getString(db.get_fld_title()), RowNumber, 0);                                
                 TableModel.setValueAt(rs.getString(db.get_fld_format()), RowNumber, 1);
@@ -127,55 +149,96 @@ public class DisplayArtistAlbumsForm extends javax.swing.JFrame {
             jTableData.getColumnModel().getColumn(1).setPreferredWidth(60);
             jTableData.getColumnModel().getColumn(2).setPreferredWidth(100);
             jTableData.getColumnModel().getColumn(3).setPreferredWidth(200);
-            AlbumCoverArt.setIcon(new ImageIcon(getClass().getResource("imagemissing.png"))); // display it
+            AlbumCoverArt.setIcon(new ImageIcon(getClass().getResource("imagemissing.png"))); // display it                        
             // table row selection            
             jTableData.setCellSelectionEnabled(true);
             ListSelectionModel cellSelectionModel = jTableData.getSelectionModel();
             cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    int selectedRow = jTableData.getSelectedRow();
-                    for (int i = 0; i < TableModel.getColumnCount(); i++) {
-                        AlbumID = TableModel.getAlbumID(selectedRow);
-                        for (Result result : iTunesResults) {
-                            // search for album cover art in iTunes
-                            if (result.getCollectionName() != null) { // artist found
-                                if (result.getCollectionName().toLowerCase().contains(String.valueOf(TableModel.getValueAt(selectedRow, 0)).toLowerCase())) {
-                                    try {
-                                        if (!result.getArtworkUrl100().isEmpty() && result.getArtworkUrl100() != null) { // artwork found
-                                            ArtworkURL = new URL(result.getArtworkUrl100()); // create url album cover art
-                                            AlbumCoverArt.setIcon(new ImageIcon(ArtworkURL)); // display it
-                                        } else {
-                                            AlbumCoverArt.setIcon(new ImageIcon(getClass().getResource("imagemissing.png"))); // display default icon
+            cellSelectionModel.addListSelectionListener((ListSelectionEvent e) -> {
+                int selectedRow = jTableData.getSelectedRow();
+                for (int i = 0; i < TableModel.getColumnCount(); i++) {
+                    AlbumID = TableModel.getAlbumID(selectedRow);
+                    for (Result result : iTunesResults) {
+                        // search for album cover art in iTunes
+                        if (result.getCollectionName() != null) {
+                            // artist found
+                            if (result.getCollectionName().toLowerCase().contains(String.valueOf(TableModel.getValueAt(selectedRow, 0)).toLowerCase())) {
+                                try {
+                                    if (!result.getArtworkUrl100().isEmpty() && result.getArtworkUrl100() != null) {
+                                        // artwork found
+                                        ArtworkURL = new URL(result.getArtworkUrl100()); // create url album cover art
+                                        AlbumCoverArt.setIcon(new ImageIcon(ArtworkURL)); // display it                                            
+                                        AlbumCoverArt.setAlignmentX(CENTER_ALIGNMENT);
+                                        // Songs List
+                                        StringBuilder sb = new StringBuilder();
+                                        Response response1 = new Lookup().addId(Long.toString(result.getCollectionId())).setEntity(Entity.SONG).execute();
+                                        List<Result> SongsResults = response1.getResults();
+                                        for (Result songresult : SongsResults) {
+                                            if (songresult.getTrackName() != null) {
+                                                String SongDuration = String.format("%d:%02d",
+                                                        TimeUnit.MILLISECONDS.toMinutes(songresult.getTrackTimeMillis()),
+                                                        TimeUnit.MILLISECONDS.toSeconds(songresult.getTrackTimeMillis()) % 60);
+                                                sb.append(songresult.getTrackNumber())
+                                                        .append(". ")
+                                                        .append(songresult.getTrackName())
+                                                        .append(" (")
+                                                        .append(SongDuration)
+                                                        .append(")")
+                                                        .append("\n");
+                                            }
                                         }
-                                    } catch (MalformedURLException ex) {
+                                        SongsTextArea.setText(sb.toString());
+                                        // end of Songs List
+                                    } else {
                                         AlbumCoverArt.setIcon(new ImageIcon(getClass().getResource("imagemissing.png"))); // display default icon
                                     }
-                                    break;
+                                }catch (MalformedURLException ex) {
+                                    AlbumCoverArt.setIcon(new ImageIcon(getClass().getResource("imagemissing.png"))); // display default icon
                                 }
-                            } else {
-                                AlbumCoverArt.setIcon(new ImageIcon(getClass().getResource("imagemissing.png"))); // display default icon
+                                break;
                             }
+                        } else {                            
+                            AlbumCoverArt.setIcon(new ImageIcon(getClass().getResource("imagemissing.png"))); // display default icon
                         }
                     }
                 }
-            });            
-            jTableData.setPreferredScrollableViewportSize(new java.awt.Dimension(700, 200));
-            TableScrollPane = new JScrollPane(jTableData);            
-            container = getContentPane();
-            container.setLayout(new FlowLayout(FlowLayout.CENTER));
-            // add everything to container        
-            container.add(TableScrollPane);
-            container.add(AlbumCoverArt);
-            container.add(jButtonBack);
-            container.add(jButtonDelete);
-            container.add(jButtonUpdate);
-            container.add(jButtonWikipedia);
+            });
+                        
+            jTableData.setPreferredScrollableViewportSize(new Dimension(700, 240));
+            TableScrollPane = new JScrollPane(jTableData);
+            
+            //songs list
+            SongsScrollPane = new JScrollPane(SongsTextArea);            
+            SongsScrollPane.setPreferredSize(new Dimension(320, 180));
+            SongsScrollPane.setAlignmentX(CENTER_ALIGNMENT);
+            // panel for album art and songs list
+            JPanel sidePanel = new JPanel();
+            sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.X_AXIS));
+            sidePanel.add(AlbumCoverArt);
+            sidePanel.add(Box.createVerticalStrut(10));
+            sidePanel.add(SongsScrollPane);
+            
+            // button panel
+            buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+            buttonPanel.add(jButtonBack);
+            buttonPanel.add(jButtonDelete);
+            buttonPanel.add(jButtonUpdate);
+            buttonPanel.add(jButtonWikipedia);            
+            add(buttonPanel, BorderLayout.SOUTH);            
+                                               
+            // add everything to container
+            containerData = getContentPane();
+            containerData.setLayout(new BorderLayout());
+            containerData.add(TableScrollPane, BorderLayout.CENTER);
+            containerData.add(sidePanel, BorderLayout.EAST);            
+            containerData.add(buttonPanel, BorderLayout.SOUTH);                        
+            
             // draw form
             setTitle(FirstUpperCase(SearchName) + " - " + NumberOfAlbums.toString() + " albums");            
-            setLocation(new java.awt.Point(200, 200));
-            setSize(new java.awt.Dimension(850, 300));
+            setLocation(new java.awt.Point(200, 200));            
+            //setSize(new Dimension(1200, 350));
+            this.pack();
+            
         } catch (SQLException ex) {
             Logger.getLogger(DisplayArtistAlbumsForm.class.getName()).log(Level.SEVERE, null, ex);
         }       
